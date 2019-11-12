@@ -6,9 +6,11 @@ const express = require('express');
 const cors=require('cors');
 const superagent=require('superagent');
 
+
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT;
+
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('./public'));
@@ -17,12 +19,12 @@ app.set('view engine', 'ejs');
 app.get('/', newSearch);
 app.post('/searches', createSearch);
 
+
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
 function newSearch(request, response) {
   response.render('pages/index');
 }
-
 function createSearch(request, response) {
   const searchedThings = request.body.search[0];
   const searchType = request.body.search[1];
