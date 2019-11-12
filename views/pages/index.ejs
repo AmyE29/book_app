@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href= "./styles/reset.css"/>
-    <link rel="stylesheet" type="text/css" href="./styles/base.css"/>
-      <title>Book App</title>
+    <link rel="stylesheet" type="text/css" href="./styles/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/base.css" />
+    <title>Book App</title>
 </head>
+
 <body>
-    <header>
-    <h2> Hello World</h2>
-    </header>
-    <main></main>
-    <footer></footer>
-    <script src = "../../server.js"></script>
+    <main>
+        <header>
+            <h2> Hello World</h2>
+        </header>
+        <main>
+            <form action="/searches" method="post">
+                <fieldset>
+                    <label for="title">
+                        <span>Title</span>
+                        <input type="radio" name="search" value="title" required>
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <label for="author">
+                        <span>Author</span>
+                        <input type="radio" name="search" value="author" required>
+                    </label>
+                </fieldset>
+                <button type="submit">Searching</button>
+            </form>
+        </main>
+        <script src="../../server.js"></script>
 </body>
+<footer></footer>
+
 </html>
