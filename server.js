@@ -38,20 +38,30 @@ function createSearch(request, response) {
   if (searchType === 'author') { url += `+inauthor:${searchedThings}`; }
 
   superagent.get(url)
-    .then( results => {
-      const bookList = results.body.times.map(book =>{
-        return new Book (book.volumeInfo);
-      });
-      console.log('google:', bookList);
-      response.status(200).render('pages/serches/show');
+    .then(results => {
+      console.log('results retuned', results);
     })
+    .catch(error => errorHandler(error, req, res));
 }
+
+app.post('/contact', (request, response) => {
+  console.log(request.body);
+  response.render('pages/index.ejs');
+});
 
 function Book(bookObj) {
-    const noBookFound = 'http://placeholder.it/300x300';
-    this.title = bookObj.title || 'no book title found';
+  const bookImg = 'http://placeholder.it/300x300';
+  this.title =bookObj.volumeInfo.title || 'No book available';
+  this.authors =bookObj.volumeInfo.authors || 'No Author Listed';
+  this.publisher =bookObj.publisher || 'No book available';
+  this.publishedDate =bookObj.publishedDate || 'No book available';
+  this.description =bookObj.description || 'No book available';
+  this.etag =bookObj.etag;
+  console.log(bookObj);
+
 }
+
+
 app.listen(PORT, () => {
   console.log(`listening on :${PORT}`);
-})
-
+});
