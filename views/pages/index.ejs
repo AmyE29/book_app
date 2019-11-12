@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href= "./styles/reset.css"/>
-    <link rel="stylesheet" type="text/css" href="./styles/base.css"/>
-      <title>Book App</title>
+    <%- include('../layouts/head') %>
 </head>
 <body>
     <header>
-    <h2> Hello World</h2>
+    <%- include('../layouts/header') %>
     </header>
-    <main></main>
+    <main>
+        <form method='POST' action='/search'>
+            <label>Search<input type='text' name='searchField' required></label>
+            <label><input type='submit' name='submit'></label>
+            <input type='radio' name='searchType' value='title'>Search by Title
+            <input type='radio' name='searchType' value='author'>Search by Author
+        </form>
+    </main>
     <footer></footer>
     <script src = "../../server.js"></script>
 </body>
