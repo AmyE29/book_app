@@ -1,10 +1,12 @@
 'use strict';
 
 require('dotenv').config();
-
+require('ejs');
 const express = require('express');
-const cors = require('cors');
-const superagent = require('superagent');
+const cors=require('cors');
+const superagent=require('superagent');
+const pg = require('pg');
+
 
 
 const app = express();
@@ -16,6 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use( express.static('./public') );
 
 app.set('view engine', 'ejs');
+
+
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', err => console.error(err));
 
 app.get('/', newSearch);
 app.post('/searches', createSearch);
