@@ -3,15 +3,15 @@
 require('dotenv').config();
 
 const express = require('express');
-const cors=require('cors');
-const superagent=require('superagent');
+const cors = require('cors');
+const superagent = require('superagent');
 
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT;
 
-app.use(express.urlencoded({extended:true}));
-app.use(express.static('./public'));
+app.use(express.urlencoded({ extended: true }));
+app.use( express.static('./public') );
 app.set('view engine', 'ejs');
 
 app.get('/', newSearch);
@@ -21,6 +21,7 @@ app.get('*', (request, response) => response.status(404).send('This route does n
 
 function newSearch(request, response) {
   response.render('pages/index');
+  response.status(200).send('klasdlkfhjsaldkj')
 }
 
 function createSearch(request, response) {
@@ -36,19 +37,22 @@ function createSearch(request, response) {
   if (searchType === 'author') { url += `+inauthor:${searchedThings}`; }
 
   superagent.get(url)
-    .then( results => {
-      const bookList = results.body.times.map(book =>{
-        return new Book (book.volumeInfo);
+    .then(results => {
+      const bookList = results.body.times.map(book => {
+        return new Book(book.volumeInfo);
       });
       console.log('google:', bookList);
-      response.status(200).render('pages/serches/show');
+      response.status(200).render('pages/searches/show');
     })
 }
 
 function Book(bookObj) {
-    const noBookFound = 'http://placeholder.it/300x300';
-    this.title = bookObj.title || 'no book title found';
+  const noBookFound = 'http://placeholder.it/300x300';
+  this.title = bookObj.title || 'no book title found';
 }
+
+
+
 app.listen(PORT, () => {
   console.log(`listening on :${PORT}`);
 })
