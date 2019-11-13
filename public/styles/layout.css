@@ -1,0 +1,12 @@
+body {
+    background: aquamarine;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vw;
+}
+
+input[type = "text"]{
+    margin: 1vw;
+    border: solid 1px black;
+    padding: 2vw;
+    box-sizing: border-box;
+}
