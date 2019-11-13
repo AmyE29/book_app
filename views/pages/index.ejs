@@ -1,39 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="./styles/reset.css" />
-    <link rel="stylesheet" type="text/css" href="./styles/base.css" />
-    <title>Book App</title>
+    <%- include('../layouts/head') %>
 </head>
-
 <body>
+    <header>
+    <%- include('../layouts/header') %>
+    </header>
     <main>
-        <header>
-            <h2> Hello Books</h2>
-        </header>
-        <main>
-            <form action="/searches" method="post">
-            <input type="text" name="search" placeholder="Enter a title or author" required>
-                <fieldset>
-                    <label for="title">
-                        <span>Title</span>
-                        <input type="radio" name="search" value="title" required>
-                    </label>
-                </fieldset>
-                <fieldset>
-                    <label for="author">
-                        <span>Author</span>
-                        <input type="radio" name="search" value="author" required>
-                    </label>
-                </fieldset>
-                <button type="submit">Searching</button>
-            </form>
-        </main>
-        <script src="../../server.js"></script>
+        <form method='POST' action='/search'>
+            <label>Search<input type='text' name='searchField' required></label>
+            <label><input type='submit' name='submit'></label>
+            <input type='radio' name='searchType' value='title' checked>Search by Title
+            <input type='radio' name='searchType' value='author'>Search by Author
+        </form>
+    </main>
+    <footer></footer>
+    <script src = "../../server.js"></script>
 </body>
-<footer></footer>
-</html>
