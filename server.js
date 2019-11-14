@@ -14,71 +14,106 @@ app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
-// Database Setup
+// set up database
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 client.on('error', err => console.error(err));
 
 
 // Routes
-app.get('/', newSearch);
-
-app.post('/search', createSearch);
+app.get('/', getBooks);
+app.post('/searches', createSearch);
+app.get('/searches/new', newSearch);
+app.post('/books', createBook);
+app.get('/books/:id', getBook);
 app.get('*', (req, res) => res.status(404).send('This route does not exist'));
 
+
 function newSearch(req, res){
-  res.render('pages/index');
+  res.render('pages/searches/new');
+}
+
+function createBook(req, res){
+  let {title, isbn, author, image_link, description, bookshelf} = req.body;
+  let SQL = 'INSERT INTO books (title, author, isbn, image_link, description, bookshelf) VALUES($1, $2, $3, $4, $5, $6);'
+  let safeValues = [title, author, isbn, image_link, description, bookshelf];
+
+  client.query(SQL, safeValues)
+    .then(() => {
+      SQL = 'SELECT * FROM books WHERE isbn = $1;'
+      safeValues = [req.body.isbn];
+
+      client.query(SQL, safeValues)
+        .then((result) =>{
+          res.redirect(`/books/${result.rows[0].id}`)
+        })
+    })
+
+  // save a book to the db, render the detail page of the book that was saved, after we save the book to the DB, SELECT * FROM books WHERE isbn = request.body.isbn, then redirect to /books/${result.rows[0].id}
+}
+
+function getBooks(req, res){
+  let SQL = 'SELECT * FROM books;';
+  return client.query(SQL)
+    .then(results => res.render('pages/index', { results: results.rows }))
+    .catch(() => {
+      res.render('pages/error');
+    })
 }
 
 function createSearch(req, res){
-  const searchedBooks = req.body.search[0];
-  const searchType = req.body.search[1];
+  // using the form data search google books, make superagent call, map over the results, render the 'pages/seraches/show' page
+  const booksSearched = req.body.search[0];
+  const typeOfSearch = req.body.search[1];
+
   let url =  `https://www.googleapis.com/books/v1/volumes?q=`;
+  console.log('wreckbody: '+req.body);
+  console.log('i think this is the number: '+req.body.params);
 
-  console.log(req.body);
-  console.log(req.body.search);
-
-  if (searchType === 'title') {
-    url += `+intitle:${searchedBooks}`;
+  if (typeOfSearch === 'title') {
+    url += `+intitle:${booksSearched}`;
   }
-  if (searchType === 'author'){
-    url += `inauthor:${searchedBooks}`;
+  if (typeOfSearch === 'author'){
+    url += `inauthor:${booksSearched}`;
   }
   superagent.get(url)
     .then(results => {
+      console.log(results.body);
       let resArr = results.body.items.map(value => {
         return new Book(value)
       })
+      // res.status(200).send(resArr); --functional
       res.status(200).render('pages/searches/show', { results: resArr });
-    }).catch(err => console.error(err));
+    }).catch(error => errorHandler(error, req, res));
 }
 
-app.post('/show', (req, res) => {
-  console.log(req.body);
-  res.render('pages/index.ejs');
+app.post('/contact', (request, response) => {
+  console.log(request.body);
+  response.render('pages/index.ejs');
 });
 
+
 function Book (data){
-  this.bookImg = `https://books.google.com/books/content?id=${data.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
+  this.image_link= `https://books.google.com/books/content?id=${data.id}&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api`
   this.title = data.volumeInfo.title;
   this.author = data.volumeInfo.authors;
   this.description = data.volumeInfo.description;
-  this.ISBN = data.industryIdentifiers[0].identifiers;
+  this.isbn = data.industryIdentifiers[0].identifier;
 }
+
 function getBook(searchString) {
-  const SQL = 'SELECT * FROM books WHERE searchfield = ($1)';
-  const safeVals = [searchString.toUpperCase()];
-  return client.query(SQL, safeVals);
+  // gets book from the DB based off of id.
+  const SQL = 'SELECT * FROM books WHERE id =$1;';
+  let values = [req.params.book_id];
+
+  return client.query(SQL, values)
+    .then(result => {
+      return res.render('pages/books/show', { book: result.rows[0] });
+    })
+    .catch(err => console.error(err));
 }
-function addBook(book) {
-  const SQL = 'INSERT INTO books (title, etag, description, bookImg, searchfield) VALUES (($1), ($2), ($3), ($4), ($5))';
-  const safeVals = [book.title, book.etag, book.description, book.bookImg, book.searchField];
-  return client.query(SQL, safeVals);
-}
-exports.addBook = addBook;
-exports.getBook = getBook;
 
 app.listen(PORT, () => {
   console.log(`listening on :${PORT}`);
