@@ -1,0 +1,14 @@
+<section>
+    <ul>
+       <% results.forEach(book =>{ %>
+           <li>
+               <h3>Book Title: <%=book.title %> </h3>
+               <p>Author: <%= book.author %> </p>
+               <p>ISBN: <%= book.isbn %> </p>
+               <p>Description: <%= book.descript %> </p>
+               <img src=   <%= book.image_url%> alt="image placehoder">
+           </li>
+       <%   }) %>
+    </ul>
+</section>
+</html>

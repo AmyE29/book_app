@@ -86,7 +86,7 @@ function createSearch(req, res){
       })
       // res.status(200).send(resArr); --functional
       res.status(200).render('pages/searches/show', { results: resArr });
-    }).catch(error => errorHandler(error, req, res));
+    })
 }
 
 app.post('/contact', (req, res) => {
@@ -110,7 +110,7 @@ function getBook(req, res) {
 
   return client.query(SQL, values)
     .then(result => {
-      return res.render('pages/searches/show', { book: result.rows[0] });
+      return res.render('pages/books/show', { book: result.rows[0] });
     })
     .catch(err => console.error(err));
 }
