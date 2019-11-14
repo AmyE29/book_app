@@ -86,12 +86,12 @@ function createSearch(req, res){
       })
       // res.status(200).send(resArr); --functional
       res.status(200).render('pages/searches/show', { results: resArr });
-    }).catch(error => errorHandler(error, req, res));
+    })
 }
 
-app.post('/contact', (request, response) => {
-  console.log(request.body);
-  response.render('pages/index.ejs');
+app.post('/contact', (req, res) => {
+  console.log(req.body);
+  res.render('pages/index.ejs');
 });
 
 
@@ -103,7 +103,7 @@ function Book (data){
   this.isbn = data.industryIdentifiers[0].identifier;
 }
 
-function getBook(searchString) {
+function getBook(req, res) {
   // gets book from the DB based off of id.
   const SQL = 'SELECT * FROM books WHERE id =$1;';
   let values = [req.params.book_id];

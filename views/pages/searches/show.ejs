@@ -4,22 +4,26 @@
     <%- include('../../layouts/head') -%>
 </head>
 <body>
-    <header>
+  <!-- <header>
     <%- include('../../layouts/header') -%>
-    </header>
-    <main>
-      <div class='container'>
-        <% results.forEach(result => { %>
-          <div class='book'>
-            <h2><%= result.title %></h2>
-            <img src='<%= result.image_link %>'>
-            <p><%= result.description %></p>
-          </div>
-        <% }) %>
-      </div>  
-    </main>
-    <footer>
-
-    </footer>
+  </header> -->
+  <section>
+    <p>Book List</p>
+  </section>
+  <ul>
+      <% arrItems.forEach(item => { %>
+        <li><% item.title %></li>
+        <li><% item.author %></li>
+        <li><% item.decription %></li>
+    <form action="/books" method="post">
+      <input name="title" value="<%= item.title %>">
+      <input name="author" value="<%= item.author %>">
+      <input name="isbn" value="<%= item.isbn %>">
+      <input name="decription" value="<%= item.descrption %>">
+      <button type="submit">Add Book</button>    
+    </form>
+</ul>
+  <footer>
+  </footer>
 </body>
 </html>
