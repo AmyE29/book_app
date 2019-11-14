@@ -18,3 +18,18 @@
     <footer></footer>
     <script src = "../../server.js"></script>
 </body>
+    <div>Total Books: <%= results.length %></div>
+    <% results.forEach(book => { %>
+      <div>
+        <ul>
+          <li>Title: <%= book.title %></li>
+          <li>Author: <%= book.author %></li>
+          <li>Description: <%= book.description %></li>
+          <li>ISBN: <%= book.isbn %></li>
+          <li>Bookshelf: <%= book.bookshelf %></li>
+          <% }) %>
+        </ul>
+      </div>
+   
+
+    

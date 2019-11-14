@@ -89,9 +89,9 @@ function createSearch(req, res){
     }).catch(error => errorHandler(error, req, res));
 }
 
-app.post('/contact', (request, response) => {
-  console.log(request.body);
-  response.render('pages/index.ejs');
+app.post('/contact', (req, res) => {
+  console.log(req.body);
+  res.render('pages/index.ejs');
 });
 
 
@@ -103,14 +103,14 @@ function Book (data){
   this.isbn = data.industryIdentifiers[0].identifier;
 }
 
-function getBook(searchString) {
+function getBook(req, res) {
   // gets book from the DB based off of id.
   const SQL = 'SELECT * FROM books WHERE id =$1;';
   let values = [req.params.book_id];
 
   return client.query(SQL, values)
     .then(result => {
-      return res.render('pages/books/show', { book: result.rows[0] });
+      return res.render('pages/searches/show', { book: result.rows[0] });
     })
     .catch(err => console.error(err));
 }
