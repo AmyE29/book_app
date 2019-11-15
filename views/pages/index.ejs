@@ -8,16 +8,7 @@
     <%- include('../layouts/header') -%>
     </header>
     <main>
-        <form method='POST' action='/searches'>
-            <label>Search<input type='text' name='searchField' required></label>
-            <label><input type='submit' name='submit'></label>
-            <input type='radio' name='searchType' value='title' checked>Search by Title
-            <input type='radio' name='searchType' value='author'>Search by Author
-        </form>
-    </main>
-    <footer></footer>
-    <script src = "../../server.js"></script>
-</body>
+    </body>
     <div>Total Books: <%= results.length %></div>
     <% results.forEach(book => { %>
       <div>
@@ -27,9 +18,14 @@
           <li>Description: <%= book.description %></li>
           <li>ISBN: <%= book.isbn %></li>
           <li>Bookshelf: <%= book.bookshelf %></li>
+          <a href="/books/<%= book.id %>">View Details</a>
           <% }) %>
         </ul>
       </div>
+    </main>
+    <footer></footer>
+    <script src = "../../server.js"></script>
+
    
 
     

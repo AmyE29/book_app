@@ -1,14 +1,26 @@
 <section>
-    <ul>
-       <% results.forEach(book =>{ %>
-           <li>
-               <h3>Book Title: <%=book.title %> </h3>
-               <p>Author: <%= book.author %> </p>
-               <p>ISBN: <%= book.isbn %> </p>
-               <p>Description: <%= book.descript %> </p>
-               <img src=   <%= book.image_url%> alt="image placehoder">
-           </li>
-       <%   }) %>
-    </ul>
-</section>
-</html>
+    <div id="content">
+    <img src="<%=book.image_url%>" alt="">
+    <h4><%= book.title %></h4>
+    <p><%= book.author %></p>
+    <p class="description"><%= book.description %></p>
+    <p>isbn: <%= book.isbn %></p>
+    <p>Bookshelf: <%= book.bookshelf %></p>
+    <button id="updateForm" class="update" type="submit">update details</button>
+    <button class="update">delete book</button>
+    </div>
+   <div class="form">
+    <form id="myForm" action="<%=`/update/${book.id}`%>" method="post">
+      <input type="hidden" name="_method" value="put">
+      <input type="text" name="title" value="<%- book.title %>" placeholder="Title">
+      <textarea name="description" placeholder="Description of the book" cols="30"
+        rows="10"><%- book.description %></textarea>
+      <input type="text" name="author" value="<%- book.author %>" placeholder="Author">
+      <input type="text" name="image_url" value="<%- book.image_url %>" placeholder="Inage url">
+      <input type="text" name="isbn" value="<%- book.isbn %>" placeholder="Book isbn">
+      <input type="text" name="bookshelf" value="<%- book.bookshelf %>" placeholder="Bookshelf">
+      <button class="update" type="submit">update</button>
+    </form>
+    </div>
+  </section>
+
